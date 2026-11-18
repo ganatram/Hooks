@@ -1,10 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import { getPerson } from './getPerson';
 
+type State = {
+  name: string | undefined;
+  score: number;
+  loading: boolean;
+};
+type Action =
+  | {
+      type: 'initialize';
+      name: string;
+    }
+  | {
+      type: 'increment';
+    }
+  | {
+      type: 'decrement';
+    }
+  | {
+      type: 'reset';
+    };
+
 export function PersonScore() {
-  const [name, setName] = useState<string | undefined>();
-  const [score, setScore] = useState(0);
-  const [loading, setLoading] = useState(true);
+  // useReducer() hook
+  const [{ name, score, loading }, dispatch] = useReducer(reducer, {
+    name: undefined,
+    score: 0,
+    loading: true,
+  });
 
   useEffect(() => {
     getPerson().then((person) => {
